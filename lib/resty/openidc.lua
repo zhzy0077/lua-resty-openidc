@@ -390,12 +390,7 @@ local function openidc_discover(url, ssl_verify)
       ngx.log(ngx.DEBUG, "response data: "..res.body)
       json, err = openidc_parse_json_response(res)
       if json then
-        if string.sub(url, 1, string.len(json['issuer'])) == json['issuer'] then
-          openidc_cache_set("discovery", url, cjson.encode(json), 24 * 60 * 60)
-        else
-          err = "issuer field in Discovery data does not match URL"
-          json = nil
-        end
+        openidc_cache_set("discovery", url, cjson.encode(json), 24 * 60 * 60)
       else
         err = "could not decode JSON from Discovery data"
       end
